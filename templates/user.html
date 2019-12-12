@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table >
+        <tr valign="top">
+            <td style="width: 170px">
+                <img src="{{user.avatar(128)}}">
+            </td>
+            <td>
+                <h1>User: {{ user.username }}</h1>
+                {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+                {% if user.last_seen %}<p>Last seen on: {{ moment(user.last_seen).format('LLL') }}</p>{% endif %}
+                <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+                {% if user == current_user %}
+                <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
+                {% elif not current_user.is_following(user) %}
+                <p><a href="{{ url_for('follow', username=user.username) }}">Follow</a></p>
+                {% else %}
+                <p><a href="{{ url_for('unfollow', username=user.username) }}">Unfollow</a></p>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    {% if form %}
+    <form action="" method="post" enctype=multipart/form-data>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.title.label }} <br>
+            {{ form.title(cols=50, rows=1) }} <br>
+            {% for error in form.title.errors %}
+            <span style="color: red;"> {{error}} </span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.description.label }} <br>
+            {{ form.description(cols=50, rows=4) }} <br>
+            {% for error in form.description.errors %}
+            <span style="color: red;"> {{error}} </span>
+            {% endfor %}
+        </p>
+        <p><input type=file name=file></p>
+        <p> {{ form.submit() }}</p>
+
+    </form>
+    {% endif %}
+    {% for post in posts %}
+        {% include '_post.html' %}
+        <a href="{{ url_for('delete_post', id=post.id) }}">Delete this item</a>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,18 @@
+<table class="table">
+    <tr valign="top">
+        <td style="width: 50px"> <img src="{{ post.author.avatar(36) }}"</td>
+        <td><a href="{{ url_for('user', username=post.author.username) }}">
+                {{post.author.username}}
+            </a>
+            {{ moment(post.timestamp).fromNow() }} added
+            <b>{{post.title}}</b>
+            <br><span >{{post.description}}</span><br>
+            <a href="{{url_for('uploaded_file',
+                        username = post.author.username, filename=post.filename)}}">
+                <img src="{{url_for('uploaded_file',
+                        username = post.author.username, filename=post.filename)}}"
+                        alt='ъеъ' height="200"/>
+            </a>
+        </td>
+    </tr>
+</table>
