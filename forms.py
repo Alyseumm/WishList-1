@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, FileField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from models import User
 
@@ -48,7 +48,7 @@ class EditProfileForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = TextAreaField('Add title', validators=[
-        DataRequired(), Length(min=1, max=32)])
+        DataRequired(), Length(min=1, max=50)])
     description = TextAreaField('Add description', validators=[
-        DataRequired(), Length(min=1, max=1000)])
+        Length(min=0, max=140)])
     submit = SubmitField('Send')
