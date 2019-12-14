@@ -47,10 +47,12 @@ class User(UserMixin, db.Model):
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
+            db.session.commit()
 
     def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
+            db.session.commit()
 
     def is_following(self, user):
         return self.followed.filter(
@@ -74,6 +76,8 @@ class Post(db.Model):
     filename = db.Column(db.String(128))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    is_post = db.Column(db.Boolean)
+    is_taken = db.Column(db.Boolean)
 
 
 @login.user_loader
