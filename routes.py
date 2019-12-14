@@ -81,6 +81,12 @@ def uploaded_file(username, filename):
     return send_from_directory(dir, filename)
 
 
+@app.route('/uploads/<filename>')
+def uploaded_file_default(filename):
+    dir = app.config['UPLOAD_FOLDER']
+    return send_from_directory(dir, filename)
+
+
 # ------------------------------------------------------------------
 
 
@@ -94,18 +100,22 @@ def user(username):
             file = request.files['file']
             if form.validate_on_submit():
                 if file and allowed_file(file.filename):
+                    is_post = True
                     filename = secure_filename(file.filename)
                     dir = os.path.join(app.config['UPLOAD_FOLDER'], username)
                     if not os.path.isdir(dir):
                         os.mkdir(dir)
                     file.save(os.path.join(dir, filename))
-                    post = Post(title=form.title.data, description=form.description.data,
-                                filename=filename,
-                                author=current_user)
-                    db.session.add(post)
-                    db.session.commit()
-                    flash('Your post has been successfully added!')
-                    return redirect(url_for('user', username=current_user.username))
+                else:
+                    is_post = False
+                    filename = "default.png"
+                post = Post(title=form.title.data, description=form.description.data,
+                            filename=filename,
+                            author=current_user, is_post=is_post, is_taken=False)
+                db.session.add(post)
+                db.session.commit()
+                flash('Your post has been successfully added!')
+                return redirect(url_for('user', username=current_user.username))
     page = request.args.get('page', 1, type=int)
     posts = user.own_posts().paginate(
         page, app.config['POSTS_PER_PAGE'], False)
@@ -196,5 +206,15 @@ def delete_post(id):
     post = Post.query.get(id)
     db.session.delete(post)
     db.session.commit()
+    flash("Your post have been successfully deleted!")
     return redirect(url_for('user', username=current_user.username))
 
+
+@app.route('/take/<id>')
+@login_required
+def take_item(id):
+    post = Post.query.get(id)
+    post.is_taken = True
+    db.session.commit()
+    flash("Wow, you've taken this gift!")
+    return redirect(url_for('user', username=post.author.username))
