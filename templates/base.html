@@ -66,40 +66,45 @@
         <br><br>
     </div>
 
-    <style type="text/css">
-        body {}
-
-        footer {
-            position: relative;
-            bottom: -1px;
-            height: 50px;
-            width: 100%;
-            background-color: #FFBABA;
-            text-align: center;
-            font-size: 100%;
-            font-family: 'Roboto', sans-serif;
-            color: #555555;
-        }
-
-        #footerDiv {
-            text-align: center;
-            position: relative;
-            top: 12px;
-            bottom: 10px
-        }
-
+    <style>
+        * {
+}
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+.wrapper {
+	position: relative;
+	min-height: 75%;
+}
+.content { }
+.footer {
+    color: #555555;
+    text-align: center;
+    background-color: #FFBABA;
+	position: absolute;
+	left: 0px;
+	bottom: -12px;
+	width: 100%;
+	height: 50px;
+}
+.myFooter{
+padding: 12px;
+}
     </style>
-
-    <footer>
-        <div id="footerDiv" align="center">
-            <p>
-                © 2019 Copyright: <a style="color: 555555" href="https://github.com/besttt-team-ever">https://github.com/besttt-team-ever</a>
-            </p>
-        </div>
-    </footer>
+<div class="wrapper">
+	<div class="footer">
+        <p class = "myFooter">
+            © 2019 Copyright: <a style="color: 555555" href="https://github.com/besttt-team-ever">https://github.com/besttt-team-ever</a>
+        </p>
+    </div>
+</div>
 
 
 </body>
 
 </html>
+
 
